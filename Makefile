@@ -13,7 +13,15 @@ install:
 	cargo add jsonwebtoken
 	cargo add argon2
 	cargo add rand_Core --features "std"
+	cargo add actix-web-httpauth
+	cargo add argonautica
+	cargo add hmac
+	cargo add jwt 
+	cargo add sha2
+
 	cargo install sqlx-cli
+
+	
 
 build:
 	cargo build
