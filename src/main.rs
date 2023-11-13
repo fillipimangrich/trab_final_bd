@@ -36,24 +36,23 @@ async fn main() -> std::io::Result<()> {
         }
     };
 
-
     HttpServer::new(move ||{
-        let cors = Cors::default()
-            .allow_any_origin()
-            .allowed_methods(vec!["GET","POST","PUT","DELETE"])
-            .allowed_headers(vec![
-                header::CONTENT_TYPE,
-                header::AUTHORIZATION,
-                header::ACCEPT,
-            ])
-            .supports_credentials();
         App::new()
                 .app_data(actix_web::web::Data::new(AppState {db: pool.clone()}))
                 .service(health_checker_handler)
-                .wrap(cors)
+                .wrap(
+                    Cors::default()
+                    .allow_any_origin()
+                    .allowed_methods(vec!["GET","POST","PUT","DELETE"])
+                    .allowed_headers(vec![
+                        header::CONTENT_TYPE,
+                        header::AUTHORIZATION,
+                        header::ACCEPT])
+                    .supports_credentials())
                 .wrap(Logger::default())
     })
     .bind(("127.0.0.1", 8080))?
     .run()
     .await
+
 } 

@@ -13,14 +13,13 @@ install:
 	cargo add jsonwebtoken
 	cargo add argon2
 	cargo add rand_Core --features "std"
-
 	cargo install sqlx-cli
 
 build:
 	cargo build
 
 stop_containers:
-	@echo "Stoping all containers..."
+	echo "Stoping all containers..."
 	if [ $$(docker ps -q) ]; then \
 		echo "found and stopped containers..."; \
 		docker stop $$(docker ps -q); \
