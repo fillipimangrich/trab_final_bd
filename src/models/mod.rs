@@ -1,7 +1,7 @@
 pub mod game;
 pub mod role;
-pub mod developers;
+pub mod developer;
 pub mod genre;
 pub mod orders;
 pub mod session;
-pub mod users;
+pub mod user;

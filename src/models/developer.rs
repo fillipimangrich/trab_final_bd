@@ -10,7 +10,7 @@ pub struct DeveloperModel {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateDeveloperSchema {
-    pub name: String,,
+    pub name: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

@@ -9,6 +9,7 @@ pub struct GameModel {
     pub price: f64,
     pub genre_id: i32,
     pub developer_id: i32,
+    pub release_date: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -17,6 +18,7 @@ pub struct CreateGameSchema {
     pub price: f64,
     pub genre_id: i32,
     pub developer_id: i32,
+    pub release_date: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -25,4 +27,5 @@ pub struct UpdateGameSchema {
     pub price: f64,
     pub genre_id: i32,
     pub developer_id: i32,
+    pub release_date: String,
 }
