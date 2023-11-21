@@ -1,9 +1,8 @@
 use crate::{AppState, models};
 use models::game::{GameModel, CreateGameSchema};
 use actix_web::{get, post, delete, web, HttpResponse, Responder};
-use chrono::DateTime;
 use chrono::NaiveDate;
-
+use serde_json::json;
 
 #[get("/games")]
 pub async fn get_games(data: web::Data<AppState>) -> impl Responder{
@@ -12,7 +11,7 @@ pub async fn get_games(data: web::Data<AppState>) -> impl Responder{
     .fetch_all(&data.db)
     .await
     {
-        Ok(games) => HttpResponse::Ok().json(games),
+        Ok(games) => HttpResponse::Ok().json(json!({"games":games})),
         Err(e) => HttpResponse::NotFound().json("No games found"),
     }
 

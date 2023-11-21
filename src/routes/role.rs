@@ -1,7 +1,7 @@
 use crate::{AppState, models};
 use models::role::{RoleModel, CreateRoleSchema};
 use actix_web::{get, post, web, HttpResponse, Responder};
-
+use serde_json::json;
 
 #[get("/roles")]
 pub async fn get_roles(data: web::Data<AppState>) -> impl Responder{
@@ -10,7 +10,7 @@ pub async fn get_roles(data: web::Data<AppState>) -> impl Responder{
     .fetch_all(&data.db)
     .await
     {
-        Ok(roles) => HttpResponse::Ok().json(roles),
+        Ok(roles) => HttpResponse::Ok().json(json!({"roles":roles})),
         Err(e) => HttpResponse::NotFound().json("No roles found"),
     }
 

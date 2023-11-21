@@ -1,7 +1,7 @@
 use crate::{AppState, models};
 use models::genre::{GenreModel, CreateGenreSchema};
 use actix_web::{get, post, web, HttpResponse, Responder};
-
+use serde_json::json;
 
 #[get("/genres")]
 pub async fn get_genres(data: web::Data<AppState>) -> impl Responder{
@@ -10,7 +10,7 @@ pub async fn get_genres(data: web::Data<AppState>) -> impl Responder{
     .fetch_all(&data.db)
     .await
     {
-        Ok(genres) => HttpResponse::Ok().json(genres),
+        Ok(genres) => HttpResponse::Ok().json(json!({"genres":genres})),
         Err(e) => HttpResponse::NotFound().json("No genre found"),
     }
 
