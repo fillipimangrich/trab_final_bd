@@ -1,6 +1,6 @@
 use crate::{AppState, models};
 use models::game::{GameModel, CreateGameSchema};
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, post, delete, web, HttpResponse, Responder};
 
 
 #[get("/games")]
@@ -32,5 +32,24 @@ pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppS
         Ok(game) => HttpResponse::Ok().json(game),
 
         Err(e) =>  HttpResponse::InternalServerError().json("Something wrong was happening"),
+    }
+}
+
+#[delete("/games/game/{id}")]
+pub async fn create_game(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
+    let id = path.into_inner();
+    
+     match sqlx::query_as::<_,GameModel>(
+        "DELETE FROM games where id = $1"       
+    )   
+        .bind(id)
+        .execute(&data.db)
+        .await
+        .unwrap()
+        .rows_affected();
+    {
+        Ok(game) => HttpResponse::Ok().json(),
+
+        Err(e) =>  HttpResponse::NotFound().json("Not Found"),
     }
 }
