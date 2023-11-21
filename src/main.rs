@@ -7,6 +7,7 @@ use actix_cors::Cors;
 use dotenv::dotenv;
 use routes::health_route::health_checker_handler;
 use routes::config::config;
+use utoipa_swagger_ui::SwaggerUi;
 pub struct AppState {
     db: Pool<Postgres>,
 }
@@ -37,6 +38,13 @@ async fn main() -> std::io::Result<()> {
             std::process::exit(1);
         }
     };
+
+    #[derive(OpenApi)]
+    #[openpai(
+        paths(
+            service::game,
+        )
+    )]
 
     HttpServer::new(move ||{
         App::new()

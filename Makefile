@@ -18,6 +18,8 @@ install:
 	cargo add hmac
 	cargo add jwt 
 	cargo add sha2
+	cargo add utoipa --features "actix_extras chrono"
+	cargo add utoipa-swagger-ui --features "actix-web"
 
 	cargo install sqlx-cli
 

@@ -36,7 +36,7 @@ pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppS
 }
 
 #[delete("/games/game/{id}")]
-pub async fn create_game(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
+pub async fn delete_game(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
     let id = path.into_inner();
     
      match sqlx::query_as::<_,GameModel>(
