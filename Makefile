@@ -26,14 +26,18 @@ install:
 build:
 	cargo build
 
+create_migrations:
+	sqlx migrate add -r init
+
+migrate-up:
+	sqlx migrate run
+
+migrate-down:
+	sqlx migrate revert
+	
 stop_containers:
-	echo "Stoping all containers..."
-	if [ $$(docker ps -q) ]; then \
-		echo "found and stopped containers..."; \
-		docker stop $$(docker ps -q); \
-	else \
-		echo "no containers found..."; \
-	fi
+	docker stop $$(docker ps -q)
+
 
 create_docker_container:
 	docker run --name ${DB_DOCKER_CONTAINER} -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
