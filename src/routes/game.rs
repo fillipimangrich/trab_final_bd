@@ -20,7 +20,7 @@ pub async fn get_games(data: web::Data<AppState>) -> impl Responder{
 pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppState>) -> impl Responder {
     
      match sqlx::query_as::<_,GameModel>(
-        "INSERT into games (name, price, genre_id, developer_id) values ($1, $2, $3, $4) returning *"       
+        "INSERT INTO games VALUES(DEFAULT, $1, $2, $3, $4) returning *"       
     )   
         .bind(body.name.to_string())
         .bind(body.price)
