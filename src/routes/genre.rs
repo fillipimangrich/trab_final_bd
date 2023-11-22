@@ -31,3 +31,17 @@ pub async fn create_genre(body: web::Json<CreateGenreSchema>, data: web::Data<Ap
         Err(e) =>  HttpResponse::InternalServerError().json("Something wrong was happening"),
     }
 }
+
+#[delete("/genres/genre/{id}")]
+pub async fn delete_genre(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
+    let id = path.into_inner();
+
+    match sqlx::query("DELETE FROM genre WHERE genre_id = $1")
+        .bind(id)
+        .execute(&data.db)
+        .await
+    {
+        Ok(_) => HttpResponse::NoContent().finish(),
+        Err(_) => HttpResponse::NotFound().json("Not Found"),
+    }
+}

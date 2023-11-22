@@ -41,7 +41,7 @@ pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppS
 pub async fn delete_game(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
     let id = path.into_inner();
 
-    match sqlx::query("DELETE FROM games WHERE id = $1")
+    match sqlx::query("DELETE FROM game WHERE game_id = $1")
         .bind(id)
         .execute(&data.db)
         .await
