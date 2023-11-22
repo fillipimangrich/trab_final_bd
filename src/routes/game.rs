@@ -12,7 +12,7 @@ pub async fn get_games(data: web::Data<AppState>) -> impl Responder{
     .await
     {
         Ok(games) => HttpResponse::Ok().json(json!({"games":games})),
-        Err(e) => HttpResponse::NotFound().json("No games found"),
+        Err(_) => HttpResponse::NotFound().json("No games found"),
     }
 
 }
@@ -20,7 +20,7 @@ pub async fn get_games(data: web::Data<AppState>) -> impl Responder{
 #[post("/games/game")]
 pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppState>) -> impl Responder {
     
-     match sqlx::query_as::<_,GameModel>(
+    match sqlx::query_as::<_,GameModel>(
         "INSERT INTO game VALUES(DEFAULT, $1, $2, $3, $4, $5) returning *"       
     ) 
         .bind(body.price as f64)  
@@ -37,21 +37,16 @@ pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppS
     }
 }
 
-// #[delete("/games/game/{id}")]
-// pub async fn delete_game(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
-//     let id = path.into_inner();
-    
-//      match sqlx::query_as::<_,GameModel>(
-//         "DELETE FROM games where id = $1"       
-//     )   
-//         .bind(id)
-//         .execute(&data.db)
-//         .await
-//         .unwrap()
-//         .rows_affected()
-//     {
-//         Ok(game) => HttpResponse::Ok().json(),
+#[delete("/games/game/{id}")]
+pub async fn delete_game(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
+    let id = path.into_inner();
 
-//         Err(e) =>  HttpResponse::NotFound().json("Not Found"),
-//     }
-// }
+    match sqlx::query("DELETE FROM games WHERE id = $1")
+        .bind(id)
+        .execute(&data.db)
+        .await
+    {
+        Ok(_) => HttpResponse::NoContent().finish(),
+        Err(_) => HttpResponse::NotFound().json("Not Found"),
+    }
+}
