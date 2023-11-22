@@ -1,6 +1,6 @@
 use crate::{AppState, models};
 use models::role::{RoleModel, CreateRoleSchema};
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, post, delete, put, web, HttpResponse, Responder};
 use serde_json::json;
 
 #[get("/roles")]

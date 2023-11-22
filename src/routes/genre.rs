@@ -1,6 +1,6 @@
 use crate::{AppState, models};
 use models::genre::{GenreModel, CreateGenreSchema};
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{get, post, put, delete, web, HttpResponse, Responder};
 use serde_json::json;
 
 #[get("/genres")]

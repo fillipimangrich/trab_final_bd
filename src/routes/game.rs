@@ -1,6 +1,6 @@
 use crate::{AppState, models};
-use models::game::{GameModel, CreateGameSchema};
-use actix_web::{get, post, delete, web, HttpResponse, Responder};
+use models::game::{GameModel, UpdateGameSchema, CreateGameSchema};
+use actix_web::{get, post, put, delete, web, HttpResponse, Responder};
 use chrono::NaiveDate;
 use serde_json::json;
 
@@ -36,6 +36,30 @@ pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppS
         Err(e) =>  HttpResponse::InternalServerError().json(e.to_string()),
     }
 }
+
+
+#[put("/games/game")]
+pub async fn update_game(path: web::Path<i32>,body: web::Json<UpdateGameSchema>, data: web::Data<AppState>) -> impl Responder {
+    let id = path.into_inner();
+    
+    match sqlx::query_as::<_,GameModel>(
+        "UPDATE game SET name = $1, price = $2, genre_id = $3, developer_id = $4, release_date = $5 WHERE game_id = $6 RETURNING *",       
+    )  
+        .bind(body.name.to_string())
+        .bind(body.price as f64) 
+        .bind(body.genre_id)
+        .bind(body.developer_id)
+        .bind(NaiveDate::parse_from_str(&body.release_date.to_string(), "%Y-%m-%d").unwrap())
+        .bind(id)
+        .fetch_one(&data.db)
+        .await
+    {
+        Ok(game) => HttpResponse::Ok().json(game),
+
+        Err(e) =>  HttpResponse::InternalServerError().json(e.to_string()),
+    }
+}
+
 
 #[delete("/games/game/{id}")]
 pub async fn delete_game(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder {
