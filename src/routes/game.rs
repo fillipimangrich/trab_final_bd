@@ -17,6 +17,21 @@ pub async fn get_games(data: web::Data<AppState>) -> impl Responder{
 
 }
 
+#[get("/games/{id}")]
+pub async fn get_game_by_id(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder{
+    let id = path.into_inner();
+
+    match sqlx::query_as::<_, GameModel>("SELECT * FROM game WHERE game_id = $1")
+    .bind(id)
+    .fetch_one(&data.db)
+    .await
+    {
+        Ok(game) => HttpResponse::Ok().json(json!({"game":game})),
+        Err(_) => HttpResponse::NotFound().json("Game not found"),
+    }
+
+}
+
 #[post("/games/game")]
 pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppState>) -> impl Responder {
     
@@ -38,7 +53,7 @@ pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppS
 }
 
 
-#[put("/games/game")]
+#[put("/games/game/{id}")]
 pub async fn update_game(path: web::Path<i32>,body: web::Json<UpdateGameSchema>, data: web::Data<AppState>) -> impl Responder {
     let id = path.into_inner();
     
