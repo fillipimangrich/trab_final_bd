@@ -33,7 +33,7 @@ async fn main() -> std::io::Result<()> {
             println!("Connected to database");
             pool
         }
-        Err(err) => {
+        Err(_) => {
             println!("failed to connect to database");
             std::process::exit(1);
         }

@@ -8,6 +8,7 @@ pub struct UserModel {
     pub nick_name: String,
     pub username: String,
     pub password: String,
+    pub role_id: i32
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -15,6 +16,7 @@ pub struct CreateUserSchema {
     pub nick_name: String,
     pub username: String,
     pub password: String,
+    pub role_id: i32
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -22,4 +24,5 @@ pub struct UpdateUserSchema {
     pub nick_name: String,
     pub username: String,
     pub password: String,
+    pub role_id: i32
 }
