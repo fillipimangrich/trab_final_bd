@@ -12,7 +12,7 @@ pub async fn get_sessions(data: web::Data<AppState>) -> impl Responder{
     .await
     {
         Ok(sessions) => HttpResponse::Ok().json(json!({"sessions":sessions})),
-        Err(_) => HttpResponse::NotFound().json("No users found"),
+        Err(_) => HttpResponse::NotFound().json("No session found"),
     }
 
 }
@@ -36,7 +36,7 @@ pub async fn get_session_by_id(path: web::Path<i32>, data: web::Data<AppState>) 
 pub async fn create_session(body: web::Json<CreateSessionSchema>, data: web::Data<AppState>) -> impl Responder {
     
     match sqlx::query_as::<_,SessionModel>(
-        "INSERT INTO sessions VALUES(DEFAULT, $1, $2, $3, $4) returning *"       
+        "INSERT INTO session VALUES(DEFAULT, $1, $2, $3, $4) returning *"       
     ) 
         .bind(body.user_id)  
         .bind(body.game_id)

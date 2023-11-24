@@ -7,20 +7,20 @@ pub struct OrderModel {
     pub order_id : i32,
     pub user_id : i32,
     pub game_id : i32,
-    pub order_date : i32,
+    pub order_date : String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateOrderSchema {
     pub user_id : i32,
     pub game_id : i32,
-    pub order_date : i32,
+    pub order_date : String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateOrderSchema {
     pub user_id : i32,
     pub game_id : i32,
-    pub order_date : i32,
+    pub order_date : String,
 }
 

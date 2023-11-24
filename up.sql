@@ -39,7 +39,7 @@ create table session(
   user_id INT,
   game_id INT,
   duration float,
-  session_date date,
+  session_date varchar(255),
   FOREIGN key (user_id) references users(user_id),
   FOREIGN key (game_id) references game(game_id)
 );
@@ -48,7 +48,7 @@ create table orders(
   order_id SERIAL PRIMARY key,
   game_id INT,
   user_id INT,
-  order_date date,
+  order_date varchar(255),
   FOREIGN key (user_id) references users(user_id),
   FOREIGN key (game_id) references game(game_id)
 );

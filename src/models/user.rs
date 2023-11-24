@@ -5,7 +5,7 @@ use sqlx::FromRow;
 #[allow(non_snake_case)]
 pub struct UserModel {
     pub user_id : i32,
-    pub nick_name: String,
+    pub nickname: String,
     pub username: String,
     pub password: String,
     pub role_id: i32
@@ -13,7 +13,7 @@ pub struct UserModel {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateUserSchema {
-    pub nick_name: String,
+    pub nickname: String,
     pub username: String,
     pub password: String,
     pub role_id: i32
@@ -21,8 +21,34 @@ pub struct CreateUserSchema {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct UpdateUserSchema {
-    pub nick_name: String,
+    pub nickname: String,
     pub username: String,
     pub password: String,
     pub role_id: i32
+}
+
+#[derive(Debug, FromRow, Deserialize, Serialize)]
+#[allow(non_snake_case)]
+pub struct UserSpendingSchema {
+    pub user_id: i32,
+    pub username: String,
+    pub total_gasto: Option<f64>,
+}
+
+#[derive(Debug, FromRow, Deserialize, Serialize)]
+#[allow(non_snake_case)]
+pub struct UserGameTimeSchema {
+    pub user_id: i32,
+    pub username: String,
+    pub total_horas_jogadas: Option<f64>,
+}
+
+#[derive(Debug, FromRow, Deserialize, Serialize)]
+#[allow(non_snake_case)]
+pub struct UserGameTimePerGameSchema {
+    pub user_id: i32,
+    pub username: String,
+    pub game_id: Option<i32>,
+    pub game_name: Option<String>,
+    pub horas_jogadas: Option<f64>,
 }

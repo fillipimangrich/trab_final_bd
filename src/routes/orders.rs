@@ -60,7 +60,7 @@ pub async fn update_order(path: web::Path<i32>,body: web::Json<UpdateOrderSchema
     )  
         .bind(body.user_id)
         .bind(body.game_id) 
-        .bind(body.order_date)
+        .bind(body.order_date.to_string())
         .bind(id)
         .fetch_one(&data.db)
         .await

@@ -1,5 +1,6 @@
 use crate::{AppState, models};
-use models::developer::{DeveloperModel, CreateDeveloperSchema, UpdateDeveloperSchema};
+use models::developer::{DeveloperModel, CreateDeveloperSchema, 
+    UpdateDeveloperSchema, DeveloperSpendingModel, DeveloperSoldsModel};
 use actix_web::{get, post, put, delete, web, HttpResponse, Responder};
 use serde_json::json;
 
@@ -17,7 +18,7 @@ pub async fn get_developers(data: web::Data<AppState>) -> impl Responder{
 
 }
 
-#[get("/developers/{id}")]
+#[get("/developer/{id}")]
 pub async fn get_developer_by_id(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder{
     let id = path.into_inner();
 
@@ -79,5 +80,103 @@ pub async fn delete_developer(path: web::Path<i32>, data: web::Data<AppState>) -
         Ok(_) => HttpResponse::NoContent().finish(),
 
         Err(_) => HttpResponse::NotFound().json("Not Found"),
+    }
+}
+
+#[get("/developers/spending")]
+pub async fn get_spending_by_all_developers(data: web::Data<AppState>) -> impl Responder{
+
+    match sqlx::query_as::<_, DeveloperSpendingModel>(
+    "SELECT
+        d.developer_id,
+        d.name,
+        COALESCE(SUM(g.price),0) AS total_ganho
+    FROM
+        developer d
+        LEFT JOIN game g ON d.developer_id = g.developer_id
+        LEFT JOIN orders o ON g.game_id = o.game_id
+    GROUP BY
+        d.developer_id, d.name
+    ORDER BY 
+        d.developer_id;")
+    .fetch_all(&data.db)
+    .await
+    {
+        Ok(developers) => HttpResponse::Ok().json(json!({"spending":developers})),
+        Err(e) => HttpResponse::NotFound().json(e.to_string()),
+    }
+}
+
+#[get("/developers/spending/{id}")]
+pub async fn get_developer_spending_by_id(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder{
+    let id = path.into_inner();
+
+    match sqlx::query_as::<_,DeveloperSpendingModel>(
+        "SELECT
+            d.developer_id,
+            d.name,
+            COALESCE(SUM(g.price),0) AS total_ganho
+        FROM
+            developer d
+            LEFT JOIN game g ON d.developer_id = g.developer_id
+            LEFT JOIN orders o ON g.game_id = o.game_id
+        WHERE d.developer_id = $1
+        GROUP BY
+            d.developer_id, d.name
+        ORDER BY 
+            d.developer_id;")
+    .bind(id)
+    .fetch_one(&data.db)
+    .await
+    {
+        Ok(developer) => HttpResponse::Ok().json(json!({"spending":developer})),
+        Err(e) => HttpResponse::NotFound().json(e.to_string()),
+    }
+}
+
+#[get("/developers/solds")]
+pub async fn get_solds_by_all_developers(data: web::Data<AppState>) -> impl Responder{
+
+    match sqlx::query_as::<_, DeveloperSoldsModel>(
+    "SELECT
+        d.developer_id,
+        d.name,
+        COALESCE(COUNT(DISTINCT o.game_id),0) AS quantidade_de_jogos_vendidos
+    FROM
+        developer d
+        LEFT JOIN game g ON d.developer_id = g.developer_id
+        LEFT JOIN orders o ON g.game_id = o.game_id
+    GROUP BY
+        d.developer_id, d.name;")
+    .fetch_all(&data.db)
+    .await
+    {
+        Ok(developers) => HttpResponse::Ok().json(json!({"solds":developers})),
+        Err(e) => HttpResponse::NotFound().json(e.to_string()),
+    }
+}
+
+#[get("/developers/solds/{id}")]
+pub async fn get_developer_solds_by_id(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder{
+    let id = path.into_inner();
+
+    match sqlx::query_as::<_,DeveloperSoldsModel>(
+    "SELECT
+        d.developer_id,
+        d.name,
+        COALESCE(COUNT(DISTINCT o.game_id),0) AS quantidade_de_jogos_vendidos
+    FROM
+        developer d
+        LEFT JOIN game g ON d.developer_id = g.developer_id
+        LEFT JOIN orders o ON g.game_id = o.game_id
+    WHERE d.developer_id = $1
+    GROUP BY
+        d.developer_id, d.name;")
+    .bind(id)
+    .fetch_one(&data.db)
+    .await
+    {
+        Ok(developer) => HttpResponse::Ok().json(json!({"spending":developer})),
+        Err(e) => HttpResponse::NotFound().json(e.to_string()),
     }
 }
