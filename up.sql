@@ -1,56 +1,55 @@
--- Add up migration script here
 create table role(
-  role_id SERIAL PRIMARY key,
-  name varchar(255)
+  role_id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
 );
 
 create table users(
-  user_id SERIAL PRIMARY key,
-  username varchar(255),
-  nickname varchar(255),
-  password varchar(255),
-  role_id INT,
-  FOREIGN key (role_id) references role(role_id)
+  user_id SERIAL PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  nickname VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role_id INT NOT NULL,
+  FOREIGN KEY (role_id) REFERENCES role(role_id)
 );
 
 CREATE table genre(
-  genre_id SERIAL PRIMARY key,
-  genre varchar(255)
+  genre_id SERIAL PRIMARY KEY,
+  genre VARCHAR(255) NOT NULL
 );
 
 create table developer(
-  developer_id SERIAL PRIMARY key,
-  name varchar(255)
+  developer_id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
 );
 
 create table game(
   game_id SERIAL PRIMARY KEY,
-  price float,
-  name varchar(255),
-  genre_id INT,
-  developer_id INT,
-  release_date varchar(255),
-  FOREIGN key (genre_id) references genre(genre_id),
-  FOREIGN key (developer_id) references developer(developer_id)
+  price FLOAT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  genre_id INT NOT NULL,
+  developer_id INT NOT NULL,
+  release_date DATE DEFAULT NOW(),
+  FOREIGN KEY (genre_id) REFERENCES genre(genre_id),
+  FOREIGN KEY (developer_id) REFERENCES developer(developer_id)
 );
 
 create table session(
   session_id SERIAL PRIMARY KEY,
-  user_id INT,
-  game_id INT,
-  duration float,
-  session_date varchar(255),
-  FOREIGN key (user_id) references users(user_id),
-  FOREIGN key (game_id) references game(game_id)
+  user_id INT NOT NULL,
+  game_id INT NOT NULL,
+  duration FLOAT NOT NULL,
+  session_date DATE DEFAULT NOW(),
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
+  FOREIGN KEY (game_id) REFERENCES game(game_id)
 );
 
 create table orders(
-  order_id SERIAL PRIMARY key,
-  game_id INT,
-  user_id INT,
-  order_date varchar(255),
-  FOREIGN key (user_id) references users(user_id),
-  FOREIGN key (game_id) references game(game_id)
+  order_id SERIAL PRIMARY KEY,
+  game_id INT NOT NULL,
+  user_id INT NOT NULL,
+  order_date DATE DEFAULT NOW(),
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
+  FOREIGN KEY (game_id) REFERENCES game(game_id)
 );
 
 -- DEVELOPERS
