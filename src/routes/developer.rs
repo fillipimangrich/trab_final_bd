@@ -1,6 +1,6 @@
 use crate::{AppState, models};
 use models::developer::{DeveloperModel, CreateDeveloperSchema, 
-    UpdateDeveloperSchema, DeveloperSpendingModel, DeveloperSoldsModel};
+    UpdateDeveloperSchema, DeveloperEarningModel, DeveloperSoldsModel};
 use actix_web::{get, post, put, delete, web, HttpResponse, Responder};
 use serde_json::json;
 
@@ -83,10 +83,10 @@ pub async fn delete_developer(path: web::Path<i32>, data: web::Data<AppState>) -
     }
 }
 
-#[get("/developers/spending")]
-pub async fn get_spending_by_all_developers(data: web::Data<AppState>) -> impl Responder{
+#[get("/developers/earnings")]
+pub async fn get_earnings_by_all_developers(data: web::Data<AppState>) -> impl Responder{
 
-    match sqlx::query_as::<_, DeveloperSpendingModel>(
+    match sqlx::query_as::<_, DeveloperEarningModel>(
     "SELECT
         d.developer_id,
         d.name,
@@ -102,16 +102,16 @@ pub async fn get_spending_by_all_developers(data: web::Data<AppState>) -> impl R
     .fetch_all(&data.db)
     .await
     {
-        Ok(developers) => HttpResponse::Ok().json(json!({"spending":developers})),
+        Ok(developers) => HttpResponse::Ok().json(json!({"earnings":developers})),
         Err(e) => HttpResponse::NotFound().json(e.to_string()),
     }
 }
 
-#[get("/developers/spending/{id}")]
-pub async fn get_developer_spending_by_id(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder{
+#[get("/developers/earnings/{id}")]
+pub async fn get_developer_earnings_by_id(path: web::Path<i32>, data: web::Data<AppState>) -> impl Responder{
     let id = path.into_inner();
 
-    match sqlx::query_as::<_,DeveloperSpendingModel>(
+    match sqlx::query_as::<_,DeveloperEarningModel>(
         "SELECT
             d.developer_id,
             d.name,

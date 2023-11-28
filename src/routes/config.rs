@@ -3,7 +3,7 @@ use super::game::{create_game, get_games, get_game_by_id, update_game, delete_ga
 use super::genre::{create_genre, get_genres, get_genre_by_id, update_genre, delete_genre};
 use super::role::{create_role, get_roles, get_role_by_id, update_role, delete_role};
 use super::developer::{create_developer, get_developers, get_developer_by_id, update_developer, 
-    delete_developer,get_spending_by_all_developers, get_developer_spending_by_id,
+    delete_developer,get_earnings_by_all_developers, get_developer_earnings_by_id,
     get_solds_by_all_developers, get_developer_solds_by_id};
 use super::user::{create_user, get_users, get_user_by_id, update_user, delete_user,
      get_spending_by_all_users, get_user_spending_by_id, get_gametime_by_all_users,
@@ -37,8 +37,8 @@ pub fn config(conf: &mut web::ServiceConfig) {
         .service(get_developer_by_id)
         .service(update_developer)
         .service(delete_developer)
-        .service(get_spending_by_all_developers)
-        .service(get_developer_spending_by_id)
+        .service(get_earnings_by_all_developers)
+        .service(get_developer_earnings_by_id)
         .service(get_developer_solds_by_id)
         .service(get_solds_by_all_developers)
 

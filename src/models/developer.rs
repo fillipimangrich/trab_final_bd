@@ -20,7 +20,7 @@ pub struct UpdateDeveloperSchema {
 
 #[derive(Debug, FromRow, Deserialize, Serialize)]
 #[allow(non_snake_case)]
-pub struct DeveloperSpendingModel {
+pub struct DeveloperEarningModel {
     pub developer_id : i32,
     pub name: String,
     pub total_ganho: Option<f64>,
