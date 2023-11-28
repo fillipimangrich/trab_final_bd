@@ -95,7 +95,7 @@ pub async fn get_spending_by_all_users(data: web::Data<AppState>) -> impl Respon
     "SELECT
         u.user_id,
         u.username,
-        SUM(g.price) AS total_gasto
+        COALESCE(SUM(g.price),0) AS total_gasto
     FROM
         users u
         left JOIN orders o ON u.user_id = o.user_id
@@ -120,7 +120,7 @@ pub async fn get_user_spending_by_id(path: web::Path<i32>, data: web::Data<AppSt
         "SELECT
             u.user_id,
             u.username,
-            SUM(g.price) AS total_gasto
+            COALESCE(SUM(g.price),0) AS total_gasto
         FROM
             users u
             LEFT JOIN orders o ON u.user_id = o.user_id
