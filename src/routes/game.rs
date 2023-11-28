@@ -12,7 +12,7 @@ pub async fn get_games(data: web::Data<AppState>) -> impl Responder{
     .await
     {
         Ok(games) => HttpResponse::Ok().json(json!({"games":games})),
-        Err(_) => HttpResponse::NotFound().json("No games found"),
+        Err(e) => HttpResponse::NotFound().json(e.to_string()),
     }
 
 }
@@ -36,13 +36,12 @@ pub async fn get_game_by_id(path: web::Path<i32>, data: web::Data<AppState>) -> 
 pub async fn create_game(body: web::Json<CreateGameSchema>, data: web::Data<AppState>) -> impl Responder {
     
     match sqlx::query_as::<_,GameModel>(
-        "INSERT INTO game VALUES(DEFAULT, $1, $2, $3, $4, $5) returning *"       
+        "INSERT INTO game VALUES(DEFAULT, $1, $2, $3, $4, DEFAULT) returning *"       
     ) 
         .bind(body.price as f64)  
         .bind(body.name.to_string())
         .bind(body.genre_id)
         .bind(body.developer_id)
-        .bind(NaiveDate::parse_from_str(&body.release_date.to_string(), "%Y-%m-%d").unwrap())
         .fetch_one(&data.db)
         .await
     {

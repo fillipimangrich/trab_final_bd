@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
+use chrono::NaiveDate;
 
 #[derive(Debug, FromRow, Deserialize, Serialize)]
 #[allow(non_snake_case)]
@@ -9,7 +10,7 @@ pub struct GameModel {
     pub price: f64,
     pub genre_id: i32,
     pub developer_id: i32,
-    pub release_date: String,
+    pub release_date: NaiveDate,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -18,7 +19,7 @@ pub struct CreateGameSchema {
     pub price: f64,
     pub genre_id: i32,
     pub developer_id: i32,
-    pub release_date: String,
+    pub release_date: NaiveDate,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -27,5 +28,5 @@ pub struct UpdateGameSchema {
     pub price: f64,
     pub genre_id: i32,
     pub developer_id: i32,
-    pub release_date: String,
+    pub release_date: NaiveDate,
 }

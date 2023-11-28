@@ -37,11 +37,10 @@ pub async fn get_order_by_id(path: web::Path<i32>, data: web::Data<AppState>) ->
 pub async fn create_order(body: web::Json<CreateOrderSchema>, data: web::Data<AppState>) -> impl Responder {
     
     match sqlx::query_as::<_,OrderModel>(
-        "INSERT INTO orders VALUES(DEFAULT, $1, $2, $3) returning *"       
+        "INSERT INTO orders VALUES(DEFAULT, $1, $2, DEFAULT) returning *"       
     ) 
         .bind(body.user_id)  
         .bind(body.game_id)
-        .bind(body.order_date.to_string())
         .fetch_one(&data.db)
         .await
     {
