@@ -15,7 +15,6 @@ pub struct OrderModel {
 pub struct CreateOrderSchema {
     pub user_id : i32,
     pub game_id : i32,
-    pub order_date : NaiveDate,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

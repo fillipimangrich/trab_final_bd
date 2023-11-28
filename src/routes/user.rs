@@ -84,7 +84,7 @@ pub async fn delete_user(path: web::Path<i32>, data: web::Data<AppState>) -> imp
         .await
     {
         Ok(_) => HttpResponse::NoContent().finish(),
-        Err(_) => HttpResponse::NotFound().json("Not Found"),
+        Err(e) => HttpResponse::NotFound().json(e.to_string()),
     }
 }
 

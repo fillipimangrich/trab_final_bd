@@ -41,7 +41,6 @@ pub async fn create_session(body: web::Json<CreateSessionSchema>, data: web::Dat
         .bind(body.user_id)  
         .bind(body.game_id)
         .bind(body.duration)
-        .bind(body.session_date.to_string())
         .fetch_one(&data.db)
         .await
     {
