@@ -1,7 +1,7 @@
 use crate::{AppState, models};
 use models::orders::{OrderModel, UpdateOrderSchema, CreateOrderSchema};
 use actix_web::{get, post, put, delete, web, HttpResponse, Responder};
-// use chrono::NaiveDate;
+use chrono::NaiveDate;
 use serde_json::json;
 
 #[get("/orders")]
@@ -59,7 +59,7 @@ pub async fn update_order(path: web::Path<i32>,body: web::Json<UpdateOrderSchema
     )  
         .bind(body.user_id)
         .bind(body.game_id) 
-        .bind(body.order_date.to_string())
+        .bind(NaiveDate::parse_from_str(&body.order_date.to_string(), "%Y-%m-%d"))
         .bind(id)
         .fetch_one(&data.db)
         .await

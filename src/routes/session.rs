@@ -1,7 +1,7 @@
 use crate::{AppState, models};
 use models::session::{SessionModel, UpdateSessionSchema, CreateSessionSchema};
 use actix_web::{get, post, put, delete, web, HttpResponse, Responder};
-// use chrono::NaiveDate;
+use chrono::NaiveDate;
 use serde_json::json;
 
 #[get("/sessions")]
@@ -61,7 +61,7 @@ pub async fn update_session(path: web::Path<i32>,body: web::Json<UpdateSessionSc
         .bind(body.user_id)  
         .bind(body.game_id)
         .bind(body.duration)
-        .bind(body.session_date.to_string())
+        .bind(NaiveDate::parse_from_str(&body.session_date.to_string(), "%Y-%m-%d"))
         .bind(id)
         .fetch_one(&data.db)
         .await
