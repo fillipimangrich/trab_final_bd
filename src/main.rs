@@ -39,12 +39,6 @@ async fn main() -> std::io::Result<()> {
         }
     };
 
-    // #[derive(OpenApi)]
-    // #[openpai(
-    //     paths(
-    //         service::game,
-    //     )
-    // )]
 
     HttpServer::new(move ||{
         App::new()

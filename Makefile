@@ -1,29 +1,7 @@
 DB_DOCKER_CONTAINER=trab_final_postgres_container
 
 install:
-	cargo add actix-web
-	cargo add actix-cors
-	cargo add serde-json
-	cargo add serde --features derive
-	cargo add chrono --features serde
-	cargo add env_logger
-	cargo add dotenv
-	cargo add uuid --features "serde v4"
-	cargo add sqlx --features "runtime-async-std-native-tls postgres chrono uuid"
-	cargo add jsonwebtoken
-	cargo add argon2
-	cargo add rand_Core --features "std"
-	cargo add actix-web-httpauth
-	cargo add argonautica
-	cargo add hmac
-	cargo add jwt 
-	cargo add sha2
-	cargo add utoipa --features "actix_extras chrono"
-	cargo add utoipa-swagger-ui --features "actix-web"
-
 	cargo install sqlx-cli
-
-	
 
 build:
 	cargo build
@@ -53,6 +31,5 @@ start_docker_db:
 run:
 	cargo run
 
-init_docker: stop_containers start_docker_db
 
-start: init_docker run
+

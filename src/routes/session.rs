@@ -61,7 +61,7 @@ pub async fn update_session(path: web::Path<i32>,body: web::Json<UpdateSessionSc
         .bind(body.user_id)  
         .bind(body.game_id)
         .bind(body.duration)
-        .bind(NaiveDate::parse_from_str(&body.session_date.to_string(), "%Y-%m-%d"))
+        .bind(NaiveDate::parse_from_str(&body.session_date.to_string(), "%Y-%m-%d").unwrap())
         .bind(id)
         .fetch_one(&data.db)
         .await
